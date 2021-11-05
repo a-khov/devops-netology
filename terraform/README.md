@@ -3,4 +3,4 @@
 Исключить файлы с названием crash.log <br>
 Исключить файлы с расширением tfvars <br>
 Исключить файлы, где название заканчивается на override с указанными расширениями tf и tf.json <br>
-игнорировать файлы настроек CLI terraformrc и terraform.rc <br>
+Игнорировать файлы настроек CLI terraformrc и terraform.rc <br>
