@@ -1,14 +1,14 @@
->><b>HISTSIZE</b> строка 1309
+><b>HISTSIZE</b> строка 1309
 >><b>ignoreboth</b> объединяет в себе 2 значения: ignorespace и ignoredups. Что позволяет игнорировать сохранение строк начинающихся с пробела и игнорировать строки совпадающей с последней командой
 
->>строка 343:
+>строка 343:<br>
 <i>{} - зарезервированные слова, список, в т.ч. список команд команд в отличии от "(...)" исполнятся в текущем инстансе, используется в различных условных циклах, условных операторах, или ограничивает тело функции, В командах выполняет подстановку элементов из списка , если упрощенно то цикличное выполнение команд с подстановкой например mkdir ./DIR_{A..Z} - создаст каталоги сименами DIR_A, DIR_B и т.д. до DIR_Z</i>
 
 >>
-mkdir /tmp/new_path_directory/
-cp /bin/bash /tmp/new_path_directory/
-PATH=/tmp/new_path_directory/:$PATH
-type -a bash
-bash is /tmp/new_path_directory/bash
-bash is /usr/bin/bash
-bash is /bin/bash
+<br>mkdir /tmp/new_path_directory/
+<br>cp /bin/bash /tmp/new_path_directory/
+<br>PATH=/tmp/new_path_directory/:$PATH
+<br>type -a bash
+<br>bash is /tmp/new_path_directory/bash
+<br>bash is /usr/bin/bash
+<br>bash is /bin/bash
