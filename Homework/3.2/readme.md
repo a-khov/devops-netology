@@ -9,7 +9,7 @@
 
 > 4. `ls 2> /dev/pts/1` при условии что вторая сессия имеет имя <i>pts/1</i>
 
-> 5. Пример команды `cat file > file_out`
+>>> 5. Пример команды `cat < file > file_out`
 
 > 6. `echo Hello world > /dev/tty1` или `cat file > /dev/tty1` При условии что графическая сессия  <i>tty1</i>
 
