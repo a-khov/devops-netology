@@ -27,19 +27,19 @@
 > 4. Зомби процессы не используют ресурсы, однако оставляют запись в таблице процессов.
 
 > 5. При команде  `strace opensnoop-bpfcc`
-    `openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) =
-    openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
-    openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
-    openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libdl.so.2", O_RDONLY|O_CLOEXEC) = 3
-    openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libutil.so.1", O_RDONLY|O_CLOEXEC) = 3`
+    `openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) =`
+    `openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3`
+    `openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3`
+    `openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libdl.so.2", O_RDONLY|O_CLOEXEC) = 3`
+    `openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libutil.so.1", O_RDONLY|O_CLOEXEC) = 3`
 > 6. <b>Part of the utsname information is also accessible via /proc/sys/kernel/{ostype, hostname, osrelease, version,
 domainname}.</b>
 
-> 7.    ; - используется для разделения команд, выполнятся будут все команды из списка.
-        && - следующая команда будет выполнятся только если предыдущая выполнилась успешно.
+> 7. &nbsp    ; - используется для разделения команд, выполнятся будут все команды из списка.<br>
+        && - следующая команда будет выполнятся только если предыдущая выполнилась успешно.<br>
     `set -e` так же будет выполнять следующюю команду если предыдущая выполнилась успешно, так же как и в `&&`
 
-> 8.   Завершит сценарий при наличии ошибок, на любом этапе выполнения сценария, кроме последней завершающей команды. Позволяет вносить в лог ошибок отсутствующие переменные.
+> 8.   Завершит сценарий при наличии ошибок, на любом этапе выполнения сценария, кроме последней завершающей команды. Позволяет вносить в лог ошибок отсутствующие переменные.<br>
         `-e завершает работу если команда выдает не нулевой код завершения.`<br>
         `-u интерпретирует не установленные переменные как ошибки`<br>
         `-x пошагово отображает все команды вместе с их аргументами`<br>
