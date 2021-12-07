@@ -75,14 +75,14 @@ node_network_transmit_errs_total{device="eth0"}<br>
     `root@vagrant:~# ps aux | grep sleep`<br>
     `root        1189  0.0  0.0   8076   528 pts/2    S+   21:20   0:00 sleep 1h`<br>
     `root        1202  0.0  0.0   8900   736 pts/1    S+   21:22   0:00 grep --color=auto sleep`<br>
-    `root@vagrant:~# nsenter --target 1189 -p --mount`<br>
+    `root@vagrant:~# nsenter --target 1189 -p --mount` <br>
     <br>
-    Как итог получаем процесс с <b>PID 1</b>`<br>
-    `root@vagrant:/# ps aux`<br>
-    `USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND`<br>
-    `root           1  0.0  0.0   8076   528 pts/2    S+   21:20   0:00 sleep 1h`<br>
-    `root           2  0.0  0.3   9836  3952 pts/1    S    21:23   0:00 -bash`<br>
-    `root          11  0.0  0.3  11492  3324 pts/1    R+   21:23   0:00 ps aux`<br>
+    Как итог получаем процесс с <b>PID 1</b>  <br>
+    `root@vagrant:/# ps aux` <br>
+    `USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND` <br>
+    `root           1  0.0  0.0   8076   528 pts/2    S+   21:20   0:00 sleep 1h` <br>
+    `root           2  0.0  0.3   9836  3952 pts/1    S    21:23   0:00 -bash` <br>
+    `root          11  0.0  0.3  11492  3324 pts/1    R+   21:23   0:00 ps aux` <br>
 
 > 7. Количество процессов на пользователя можно задать с помощью `ulimit -u`
 `:(){ :|:& };:` - это рекурсивная функция. Вызывает 2 копии себя самой
