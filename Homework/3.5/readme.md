@@ -115,3 +115,34 @@ The partition table has been altered.<br>
 Calling ioctl() to re-read partition table.<br>
 Syncing disks.<br>
 </details> 
+
+> 6. `sudo mdadm -C /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1`
+> 7. `sudo mdadm -C /dev/md1 --level=0 --raid-devices=2 /dev/sdb2 /dev/sdc2`
+> 8. `sudo pvcreate /dev/md0 /dev/md1`
+> 9. `sudo vgcreate vol_group1 /dev/md0 /dev/md1`
+> 10. `sudo lvcreate -L 100M -n logical_vol1 vol_group1 /dev/md1`
+> 11. `sudo mkfs.ext4 /dev/vol_group1/logical_vol1`
+> 12. `mkdir /tmp/new`<br>
+`sudo mount /dev/vol_group1/logical_vol1 /tmp/new`
+> 13. `wget https://mirror.yandex.ru/ubuntu/ls-lR.gz -O /tmp/new/test.gz`
+
+14. `lsblk`
+NAME                          MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
+sda                             8:0    0   64G  0 disk
+├─sda1                          8:1    0  512M  0 part  /boot/efi
+├─sda2                          8:2    0    1K  0 part
+└─sda5                          8:5    0 63.5G  0 part
+  ├─vgvagrant-root            253:0    0 62.6G  0 lvm   /
+  └─vgvagrant-swap_1          253:1    0  980M  0 lvm   [SWAP]
+sdb                             8:16   0  2.5G  0 disk
+├─sdb1                          8:17   0    2G  0 part
+│ └─md0                         9:0    0    2G  0 raid1
+└─sdb2                          8:18   0  511M  0 part
+  └─md1                         9:1    0 1018M  0 raid0
+    └─vol_group1-logical_vol1 253:2    0  100M  0 lvm   /tmp/new
+sdc                             8:32   0  2.5G  0 disk
+├─sdc1                          8:33   0    2G  0 part
+│ └─md0                         9:0    0    2G  0 raid1
+└─sdc2                          8:34   0  511M  0 part
+  └─md1                         9:1    0 1018M  0 raid0
+    └─vol_group1-logical_vol1 253:2    0  100M  0 lvm   /tmp/new
