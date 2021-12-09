@@ -126,7 +126,7 @@ Syncing disks.<br>
 `sudo mount /dev/vol_group1/logical_vol1 /tmp/new`
 > 13. `wget https://mirror.yandex.ru/ubuntu/ls-lR.gz -O /tmp/new/test.gz`
 
-14. `lsblk`
+>14. `lsblk`
 ```NAME                          MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
 sda                             8:0    0   64G  0 disk
 ├─sda1                          8:1    0  512M  0 part  /boot/efi
@@ -147,3 +147,6 @@ sdc                             8:32   0  2.5G  0 disk
   └─md1                         9:1    0 1018M  0 raid0
     └─vol_group1-logical_vol1 253:2    0  100M  0 lvm   /tmp/new
 ``` 
+> 15.   ``root@vagrant:~# gzip -t /tmp/new/test.gz
+        root@vagrant:~# echo $?
+        0``
