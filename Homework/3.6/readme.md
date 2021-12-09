@@ -39,3 +39,6 @@ Set-Cookie: prov=a1cddc1f-fbfa-38df-a273-c9a816e1f54b; domain=.stackoverflow.com
   
 ![11](https://github.com/a-khov/devops-netology/raw/main/Homework/3.6/8.jpg)
 
+Дольше всего загружалась сама страница после переадрессации.
+
+3. 
