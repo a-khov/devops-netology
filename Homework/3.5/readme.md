@@ -87,7 +87,7 @@ Device     Boot   Start     End Sectors  Size Id Type <br>
 </p></details>
 
 > 5. `sfdisk -d /dev/sdb|sfdisk --force /dev/sdc`
-<details> Checking that no-one is using this disk right now ... OK
+<details> <summary>Checking that no-one is using this disk right now ... OK</summary>
 
 Disk /dev/sdc: 2.51 GiB, 2684354560 bytes, 5242880 sectors
 Disk model: VBOX HARDDISK
