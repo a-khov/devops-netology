@@ -146,3 +146,4 @@ sdc                             8:32   0  2.5G  0 disk
 └─sdc2                          8:34   0  511M  0 part
   └─md1                         9:1    0 1018M  0 raid0
     └─vol_group1-logical_vol1 253:2    0  100M  0 lvm   /tmp/new
+    
