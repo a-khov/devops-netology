@@ -33,12 +33,9 @@ Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes</i>
 `root@vagrant:~# fdisk /dev/sdb`
-<details> 
- 
-   
-<i>
+<details>   
 <summary>Command (m for help): n</summary>
-<p>Partition type
+<p><i>Partition type
    p   primary (0 primary, 0 extended, 4 free)
    e   extended (container for logical partitions)
 Select (default p): `p`
@@ -51,9 +48,9 @@ Select (default p): `p`
 Partition number (2-4, default 2): `2`
 First sector (4196352-5242879, default 4196352): `4196352`
 Last sector, +/-sectors or +/-size{K,M,G,T,P} (4196352-5242879, default 5242879): ` `
-Created a new partition 2 of type 'Linux' and of size 511 MiB.</p>
+Created a new partition 2 of type 'Linux' and of size 511 MiB.</i></p>
 
-root@vagrant:~# /sbin/fdisk -l
+<i>root@vagrant:~# /sbin/fdisk -l
 Disk /dev/sda: 64 GiB, 68719476736 bytes, 134217728 sectors
 Disk model: VBOX HARDDISK
 Units: sectors of 1 * 512 = 512 bytes
