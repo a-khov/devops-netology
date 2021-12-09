@@ -156,7 +156,7 @@ sdc                             8:32   0  2.5G  0 disk
 > 18. `dmesg`<br>
 [ 5468.811362] md/raid1:md0: Disk failure on sdb1, disabling device.<br>
                md/raid1:md0: Operation continuing on 1 devices.<br>
-> 19.   `root@vagrant:~# gzip -t /tmp/new/test.gz`
-        `root@vagrant:~# echo $?`
-        `0`
+> 19.   `root@vagrant:~# gzip -t /tmp/new/test.gz`<br>
+        `root@vagrant:~# echo $?`<br>
+        `0`<br>
 > 20.   `vagrant destroy`
