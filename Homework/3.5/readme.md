@@ -5,8 +5,10 @@
 > 3. Поднята VM с новой конфигурацией
 
 > 4. 
-`root@vagrant:~# fdisk -l`
-<i>Disk /dev/sda: 64 GiB, 68719476736 bytes, 134217728 sectors
+`root@vagrant:~# fdisk -l`<br>
+<details>   
+<summary>Disk /dev/sda: 64 GiB, 68719476736 bytes, 134217728 sectors</summary>
+<p><i>
 Disk model: VBOX HARDDISK
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
@@ -31,8 +33,8 @@ Disk /dev/sdc: 2.51 GiB, 2684354560 bytes, 5242880 sectors
 Disk model: VBOX HARDDISK
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes</i>
-`root@vagrant:~# fdisk /dev/sdb`
+I/O size (minimum/optimal): 512 bytes / 512 bytes</i></details><br>
+`root@vagrant:~# fdisk /dev/sdb` <br>
 <details>   
 <summary>Command (m for help): n</summary>
 <p><i>Partition type
