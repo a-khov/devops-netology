@@ -24,6 +24,7 @@ X-DNS-Prefetch-Control: off
 Set-Cookie: prov=a1cddc1f-fbfa-38df-a273-c9a816e1f54b; domain=.stackoverflow.com; expires=Fri, 01-Jan-2055 00:00:00 GMT; path=/; HttpOnly```
 <br>
 <i>301 Moved Permanently -Означает что запрошенный ресурс был на постоянной основе перемещён в новое месторасположение, и указывающий на то, что текущие ссылки, использующие данный URL, должны быть обновлены. Адрес нового месторасположения ресурса указывается в поле Location получаемого в ответ заголовка пакета протокола HTTP</i>
+```
 
 > 2. ```Request URL: http://stackoverflow.com/
 Request Method: GET
@@ -34,5 +35,5 @@ Non-Authoritative-Reason: HSTS
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
 Upgrade-Insecure-Requests: 1
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36```
-
+<img scr="8.jpg">
 > 3. 
