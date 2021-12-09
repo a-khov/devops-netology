@@ -35,24 +35,30 @@ Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes</i></details><br>
 `root@vagrant:~# fdisk /dev/sdb` <br>
-<details>   
-<summary>Command (m for help): n</summary>
-<p><i>Partition type
-   p   primary (0 primary, 0 extended, 4 free)
-   e   extended (container for logical partitions)
-Select (default p): `p`
-Partition number (1-4, default 1): `1`
-First sector (2048-5242879, default 2048): `2048`
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-5242879, default 5242879): `+2048M`
-Created a new partition 1 of type 'Linux' and of size 2 GiB.
-Command (m for help): `n`
-Select (default p): `p`
-Partition number (2-4, default 2): `2`
-First sector (4196352-5242879, default 4196352): `4196352`
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (4196352-5242879, default 5242879): ` `
-Created a new partition 2 of type 'Linux' and of size 511 MiB.</i></p>
+>>Command (m for help): n
+>>Partition type
+>>   p   primary (0 primary, 0 extended, 4 free)
+>>   e   extended (container for logical partitions)
+>>Select (default p): `p`
+>>Partition number (1-4, default 1): `1`
+>>First sector (2048-5242879, default 2048): `2048`
+>>Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-5242879, default 5242879): `+2048M`
+>>Created a new partition 1 of type 'Linux' and of size 2 GiB.
+>>Command (m for help): `n`
+>>Select (default p): `p`
+>>Partition number (2-4, default 2): `2`
+>>First sector (4196352-5242879, default 4196352): `4196352`
+>>Last sector, +/-sectors or +/-size{K,M,G,T,P} (4196352-5242879, default 5242879): ` `
+>>Created a new partition 2 of type 'Linux' and of size 511 MiB.
 
-<i>root@vagrant:~# /sbin/fdisk -l
+`root@vagrant:~# /sbin/fdisk -l`
+<details>   
+    <summary>
+    Device     Boot   Start     End Sectors  Size Id Type
+    /dev/sdb1          2048 4196351 4194304    2G 83 Linux
+    /dev/sdb2       4196352 5242879 1046528  511M 83 Linux
+    </summary>
+<p>
 Disk /dev/sda: 64 GiB, 68719476736 bytes, 134217728 sectors
 Disk model: VBOX HARDDISK
 Units: sectors of 1 * 512 = 512 bytes
@@ -78,4 +84,4 @@ Disk identifier: 0x8fe54f9a
 Device     Boot   Start     End Sectors  Size Id Type
 /dev/sdb1          2048 4196351 4194304    2G 83 Linux
 /dev/sdb2       4196352 5242879 1046528  511M 83 Linux
-</i>
+</p>
