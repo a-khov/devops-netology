@@ -147,6 +147,16 @@ sdc                             8:32   0  2.5G  0 disk
   └─md1                         9:1    0 1018M  0 raid0
     └─vol_group1-logical_vol1 253:2    0  100M  0 lvm   /tmp/new
 ``` 
-> 15.   ``root@vagrant:~# gzip -t /tmp/new/test.gz
+> 15.   `root@vagrant:~# gzip -t /tmp/new/test.gz`<br>
+        `root@vagrant:~# echo $?` <br>
+        `0` <br> 
+> 16. `root@vagrant:~# pvmove /dev/md1 /dev/md0`
+> 17. `root@vagrant:~# mdadm --fail /dev/md0 /dev/sdb1` <br>
+`mdadm: set /dev/sdb1 faulty in /dev/md0`
+> 18. `dmesg`
+[ 5468.811362] md/raid1:md0: Disk failure on sdb1, disabling device.
+               md/raid1:md0: Operation continuing on 1 devices.
+> 19.   root@vagrant:~# gzip -t /tmp/new/test.gz
         root@vagrant:~# echo $?
-        0``
+        0
+> 20.   `vagrant destroy`
