@@ -99,9 +99,8 @@ Keys:  Help   Display mode   Restart statistics   Order of fields   quit
 Самая большая задержка на AS15169 74.125.244.181 
 
 7. `vagrant@vagrant:~$ dig +trace dns.google`
-<details>   
-<summary>
-; <<>> DiG 9.16.1-Ubuntu <<>> +trace dns.google </summary>
+``` 
+; <<>> DiG 9.16.1-Ubuntu <<>> +trace dns.google
 ` ;; global options: +cmd
 .                       20370   IN      NS      g.root-servers.net.
 .                       20370   IN      NS      c.root-servers.net.
@@ -138,8 +137,8 @@ dns.google.             3600    IN      RRSIG   DS 8 2 3600 20211229191018 20211
 dns.google.             900     IN      A       8.8.4.4
 dns.google.             900     IN      A       8.8.8.8
 dns.google.             900     IN      RRSIG   A 8 2 900 20220109081006 20211210081006 1773 dns.google. Q8EMwf3HFBJawtJGRLi6M5/GIkaqBu00836UOMskbXALZnCw2/ElTDIL 4GjuRRIkRXdBo+zJGplaWLjKJO8J9cRdB8pKwNbCiObO80CDaWL9HVjU fU21QP3IScEbkdaodtyzhb7qckvM4oQVMh6tJwZJa0R7xs7RShaOrERv vgI=
-;; Received 241 bytes from 216.239.34.114#53(ns2.zdns.google) in 99 ms `</details>
-```
+;; Received 241 bytes from 216.239.34.114#53(ns2.zdns.google) in 99 ms </details>
+``` 
 dns.google A-записи прописаны ip 8.8.4.4 и 8.8.8.8  
 Серверы ns1.zdns.google. ns2.zdns.google. ns3.zdns.google. ns4.zdns.google. 
 
