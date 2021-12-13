@@ -27,7 +27,7 @@ Set-Cookie: prov=a1cddc1f-fbfa-38df-a273-c9a816e1f54b; domain=.stackoverflow.com
 ```
 
 2.
-`Request URL: http://stackoverflow.com/`
+`Request URL: http://stackoverflow.com/`<br>
   Request Method: GET <br>
   Status Code: 307 Internal Redirect<br>
   Referrer Policy: strict-origin-when-cross-origin<br>
