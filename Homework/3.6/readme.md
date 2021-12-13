@@ -94,8 +94,8 @@ Keys:  Help   Display mode   Restart statistics   Order of fields   quit
 12. AS15169  74.125.244.181                                                   0.0%     9   61.1  37.9  26.8  61.1   9.8
 13. AS15169  142.251.51.187                                                   0.0%     9   35.3  39.1  33.2  46.0   4.6
 14. AS15169  172.253.51.245                                                   0.0%     9   40.7  37.8  32.2  43.7   3.6
-15. (waiting for reply) 
-```
+15. (waiting for reply)  ```
+
 Самая большая задержка на AS15169 74.125.244.181 
 
 7. `vagrant@vagrant:~$ dig +trace dns.google`
