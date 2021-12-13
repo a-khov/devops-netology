@@ -27,15 +27,15 @@ Set-Cookie: prov=a1cddc1f-fbfa-38df-a273-c9a816e1f54b; domain=.stackoverflow.com
 ```
 
 2.
-`Request URL: http://stackoverflow.com/
-  Request Method: GET
-  Status Code: 307 Internal Redirect
-  Referrer Policy: strict-origin-when-cross-origin
-  Location: https://stackoverflow.com/
-  Non-Authoritative-Reason: HSTS
-  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-  Upgrade-Insecure-Requests: 1
-  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36 `
+`Request URL: http://stackoverflow.com/`
+`  Request Method: GET`
+`  Status Code: 307 Internal Redirect`
+`  Referrer Policy: strict-origin-when-cross-origin`
+`  Location: https://stackoverflow.com/`
+`  Non-Authoritative-Reason: HSTS`
+`  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9`
+`  Upgrade-Insecure-Requests: 1`
+`  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36 `
   
 ![11](https://github.com/a-khov/devops-netology/raw/main/Homework/3.6/8.jpg)
 
@@ -44,12 +44,12 @@ Set-Cookie: prov=a1cddc1f-fbfa-38df-a273-c9a816e1f54b; domain=.stackoverflow.com
 3. `curl ifconfig.me/ip` 
     <i>94.25.229.162</i>
 
-4.  descr:          SPb Scartel User Network
+4.  descr:          SPb Scartel User Network<br>
     origin:         AS47395
 
 5. Получилось, но все скрыты 
-vagrant@vagrant:~$ sudo traceroute -nA 8.8.8.8 -I
-traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+`vagrant@vagrant:~$ sudo traceroute -nA 8.8.8.8 -I`
+```traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
  1  10.0.2.2 [*]  0.263 ms  0.239 ms  0.226 ms
  2  10.225.40.1 [*]  6.012 ms  6.127 ms  6.102 ms
  3  * * *
@@ -71,9 +71,9 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
 19  * * *
 20  * * *
 21  * * *
-22  * 8.8.8.8 [AS15169]  7.026 ms *
+22  * 8.8.8.8 [AS15169]  7.026 ms * ```
 
-6. `vagrant@vagrant:~$ mtr 8.8.8.8 -z`
+6. `vagrant@vagrant:~$ mtr 8.8.8.8 -z` ```
                                                  My traceroute  [v0.93]
 vagrant (10.0.2.15)                                                                            2021-12-10T11:57:50+0000
 Keys:  Help   Display mode   Restart statistics   Order of fields   quit
@@ -93,7 +93,7 @@ Keys:  Help   Display mode   Restart statistics   Order of fields   quit
 12. AS15169  74.125.244.181                                                   0.0%     9   61.1  37.9  26.8  61.1   9.8
 13. AS15169  142.251.51.187                                                   0.0%     9   35.3  39.1  33.2  46.0   4.6
 14. AS15169  172.253.51.245                                                   0.0%     9   40.7  37.8  32.2  43.7   3.6
-15. (waiting for reply)
+15. (waiting for reply) ```
 Самая большая задержка на AS15169 74.125.244.181 
 `
 7. `vagrant@vagrant:~$ dig +trace dns.google`
@@ -138,5 +138,7 @@ dns.google.             900     IN      A       8.8.8.8
 dns.google.             900     IN      RRSIG   A 8 2 900 20220109081006 20211210081006 1773 dns.google. Q8EMwf3HFBJawtJGRLi6M5/GIkaqBu00836UOMskbXALZnCw2/ElTDIL 4GjuRRIkRXdBo+zJGplaWLjKJO8J9cRdB8pKwNbCiObO80CDaWL9HVjU fU21QP3IScEbkdaodtyzhb7qckvM4oQVMh6tJwZJa0R7xs7RShaOrERv vgI=
 ;; Received 241 bytes from 216.239.34.114#53(ns2.zdns.google) in 99 ms </details>
 
-dns.google A-записи прописаны ip 8.8.4.4 и 8.8.8.8 
-Серверы ns1.zdns.google. ns2.zdns.google. ns3.zdns.google. ns4.zdns.google.
+dns.google A-записи прописаны ip 8.8.4.4 и 8.8.8.8  
+Серверы ns1.zdns.google. ns2.zdns.google. ns3.zdns.google. ns4.zdns.google. 
+
+8. 
