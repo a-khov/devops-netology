@@ -1,15 +1,15 @@
 1.  Для linux: <br>
-    ip -c -br link<br>  
-    ip -c -br address<br>
-    ifconfig<br>
-Для Windows ipconfig /all
+    `ip -c -br link`<br>  
+    `ip -c -br address`<br>
+    `ifconfig`<br>
+Для Windows `ipconfig /all`
 
 2. Для распознования используется протокол LLDP. Для Linux это пакет lldpd
 
 3. Для разделения подсети используется технология VLAN. Модуль для Ubuntu - Vlan. Для поднятия vlan после перезагруки надо прописать в файле `/etc/network/interfaces`
 <details> 
 <summary>пример из Wiki</summary>
-                
+
                 auto vlan1400
                     iface vlan1400 inet static
                     address 192.168.1.1
