@@ -7,14 +7,14 @@
 2. Для распознования используется протокол LLDP. Для Linux это пакет lldpd
 
 3. Для разделения подсети используется технология VLAN. Модуль для Ubuntu - Vlan. Для поднятия vlan после перезагруки надо прописать в файле `/etc/network/interfaces`
-пример из Wiki
-```
-auto vlan1400
-iface vlan1400 inet static
-        address 192.168.1.1
-        netmask 255.255.255.0
-        vlan_raw_device eth0
-```
+<details> 
+<summary>пример из Wiki</summary>
+                auto vlan1400
+                    iface vlan1400 inet static
+                    address 192.168.1.1
+                    netmask 255.255.255.0
+                    vlan_raw_device eth0
+</details>
 4. Типы LAG:<br>
         статический (на Cisco mode on);<br>
         динамический – LACP протокол (на Cisco mode active).<br>
