@@ -9,6 +9,7 @@
 3. Для разделения подсети используется технология VLAN. Модуль для Ubuntu - Vlan. Для поднятия vlan после перезагруки надо прописать в файле `/etc/network/interfaces`
 <details> 
 <summary>пример из Wiki</summary>
+                
                 auto vlan1400
                     iface vlan1400 inet static
                     address 192.168.1.1
