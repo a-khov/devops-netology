@@ -218,3 +218,22 @@
                 10.0.2.0        0.0.0.0         255.255.255.0   U     0      0        0 eth0
                 _gateway        0.0.0.0         255.255.255.255 UH    100    0        0 eth0
                 192.168.111.0   0.0.0.0         255.255.255.0   U     0      0        0 dummy0
+
+
+### 3.
+Команда `sudo ss -tnlp`
+
+                State    Recv-Q   Send-Q     Local Address:Port      Peer Address:Port   Process
+                LISTEN   0        4096             0.0.0.0:111            0.0.0.0:*       users:(("rpcbind",pid=598,fd=4),("systemd",pid=1,fd=35))
+                LISTEN   0        511              0.0.0.0:80             0.0.0.0:*       users:(("nginx",pid=726,fd=6),("nginx",pid=725,fd=6),("nginx",pid=724,fd=6))
+                LISTEN   0        4096       127.0.0.53%lo:53             0.0.0.0:*       users:(("systemd-resolve",pid=599,fd=13))
+                LISTEN   0        128              0.0.0.0:22             0.0.0.0:*       users:(("sshd",pid=791,fd=3))
+                LISTEN   0        4096                [::]:111               [::]:*       users:(("rpcbind",pid=598,fd=6),("systemd",pid=1,fd=37))
+                LISTEN   0        50                     *:8080                 *:*       users:(("java",pid=951,fd=119))
+                LISTEN   0        511                 [::]:80                [::]:*       users:(("nginx",pid=726,fd=7),("nginx",pid=725,fd=7),("nginx",pid=724,fd=7))
+                LISTEN   0        128                 [::]:22                [::]:*       users:(("sshd",pid=791,fd=4))
+
+Тут мы можем увидеть сервер **nginx** работающий на **80** порт
+
+### 4. 
+
