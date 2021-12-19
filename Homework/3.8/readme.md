@@ -1,4 +1,4 @@
-1 
+1. 
 <details> 
 <summary>route-views>show ip route 188.162.64.143 </summary>
 
@@ -180,3 +180,38 @@
                       rx pathid: 0, tx pathid: 0
 
 </details> 
+
+2 
+Активируем модуль dummy`sudo nano /etc/modules` --> `dummy`
+Прописываем опцию для dummy `sudo nano /etc/modprobe.d/dummy.conf` --> `option dummy numdumies=2"`
+<details> 
+<summary>Вносим интерфейс dummy0 `sudo nano /etc/network/interfaces` и сразу прописываем маршрут</summary>
+
+                # interfaces(5) file used by ifup(8) and ifdown(8)
+                # Include files from /etc/network/interfaces.d:
+                source-directory /etc/network/interfaces.d
+
+                auto dummy0
+                iface dummy0 inet static
+                        adress 10.2.2.2/32
+                        pre-up ip link add dummy0 type dummy
+                        post-up ip route add 192.168.111.0/24 dev dummy0
+                        post-down ip link del dummy0
+
+</details>
+
+Проверим интерфейс `ip a`
+                3: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+                    link/ether 12:32:9d:b4:7b:78 brd ff:ff:ff:ff:ff:ff
+                    inet 10.2.2.2/32 brd 10.2.2.2 scope global dummy0
+                       valid_lft forever preferred_lft forever
+                    inet6 fe80::1032:9dff:feb4:7b78/64 scope link
+                       valid_lft forever preferred_lft forever
+
+Проверим маршрут `route`
+                Kernel IP routing table
+                Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+                default         _gateway        0.0.0.0         UG    100    0        0 eth0
+                10.0.2.0        0.0.0.0         255.255.255.0   U     0      0        0 eth0
+                _gateway        0.0.0.0         255.255.255.255 UH    100    0        0 eth0
+                192.168.111.0   0.0.0.0         255.255.255.0   U     0      0        0 dummy0
