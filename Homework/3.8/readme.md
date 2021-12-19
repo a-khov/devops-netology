@@ -1,4 +1,4 @@
-1. 
+### 1. 
 <details> 
 <summary>route-views>show ip route 188.162.64.143 </summary>
 
@@ -181,7 +181,7 @@
 
 </details> 
 
-2.  
+### 2.  
 Активируем модуль dummy`sudo nano /etc/modules` --> `dummy`<br>
 Прописываем опцию для dummy `sudo nano /etc/modprobe.d/dummy.conf` --> `option dummy numdumies=2"`<br>
 <details> 
