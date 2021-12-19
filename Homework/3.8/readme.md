@@ -236,4 +236,18 @@
 Тут мы можем увидеть сервер **nginx** работающий на **80** порт
 
 ### 4. 
+Команда `sudo ss -unlp`
+
+                State      Recv-Q     Send-Q            Local Address:Port           Peer Address:Port     Process
+                UNCONN     0          0                 127.0.0.53%lo:53                  0.0.0.0:*         users:(("systemd-resolve",pid=599,fd=12))
+                UNCONN     0          0                10.0.2.15%eth0:68                  0.0.0.0:*         users:(("systemd-network",pid=405,fd=19))
+                UNCONN     0          0                       0.0.0.0:111                 0.0.0.0:*         users:(("rpcbind",pid=598,fd=5),("systemd",pid=1,fd=36))
+                UNCONN     0          0                     127.0.0.1:161                 0.0.0.0:*         users:(("snmpd",pid=710,fd=6))
+                UNCONN     0          0                          [::]:111                    [::]:*         users:(("rpcbind",pid=598,fd=7),("systemd",pid=1,fd=38))
+                UNCONN     0          0                         [::1]:161                    [::]:*         users:(("snmpd",pid=710,fd=7))
+
+***systemd-resolve*** он же распознователь DNS слушает *53* порт. 
+
+### 5. 
+
 
