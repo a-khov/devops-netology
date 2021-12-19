@@ -181,9 +181,9 @@
 
 </details> 
 
-2 
-Активируем модуль dummy`sudo nano /etc/modules` --> `dummy`
-Прописываем опцию для dummy `sudo nano /etc/modprobe.d/dummy.conf` --> `option dummy numdumies=2"`
+2.  
+Активируем модуль dummy`sudo nano /etc/modules` --> `dummy`<br>
+Прописываем опцию для dummy `sudo nano /etc/modprobe.d/dummy.conf` --> `option dummy numdumies=2"`<br>
 <details> 
 <summary>Вносим интерфейс dummy0 `sudo nano /etc/network/interfaces` и сразу прописываем маршрут</summary>
 
@@ -201,6 +201,7 @@
 </details>
 
 Проверим интерфейс `ip a`
+                 
                 3: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
                     link/ether 12:32:9d:b4:7b:78 brd ff:ff:ff:ff:ff:ff
                     inet 10.2.2.2/32 brd 10.2.2.2 scope global dummy0
@@ -208,7 +209,9 @@
                     inet6 fe80::1032:9dff:feb4:7b78/64 scope link
                        valid_lft forever preferred_lft forever
 
+
 Проверим маршрут `route`
+                 
                 Kernel IP routing table
                 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
                 default         _gateway        0.0.0.0         UG    100    0        0 eth0
