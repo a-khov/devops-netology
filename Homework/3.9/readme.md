@@ -156,17 +156,26 @@
 
 5. 
 установка sshd сервер
-                 apt install openssh-server
-                 systemctl start sshd.service
-                 systemctl enable sshd.service
+
+                apt install openssh-server
+                systemctl start sshd.service
+                systemctl enable sshd.service
+
 генерим ключ
-                  ssh-keygen
+
+                ssh-keygen
+
 копируем публичный ключ на удаленный сервер
-                 ssh-copy-id user@10.0.88.5
+
+                ssh-copy-id user@10.0.88.5
+
 подключаемся по стандартному ключу
-                 ssh user@10.0.88.5
+
+                ssh user@10.0.88.5
+            
 Проверяем ключ Ssh
-                 ssh-audit localhostlhost
+
+                ssh-audit localhostlhost
 
 6. В папке ~/.ssh создаем файл config, чтобы задать hostname
 
