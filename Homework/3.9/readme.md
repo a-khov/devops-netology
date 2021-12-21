@@ -2,11 +2,34 @@
 
 2. Включил двухфакторную аутентификацию. Подключил Google Authenticator. 
 
+3. 
+Ставим apache2
+                sudo apt install apache2
+                sudo a2enmod ssl
+                sudo systemctl restart apache2
+Генерим серт
+                sudo openssl req -x509 -nodes -days 36500 -newkey rsa:2048 -keyout /etc/ssl/private/apache-ssc.key -out /etc/ssl/certs/apache-ssc.crt -subj "/C=RU/ST=SPb/L=SPb/O=DevCo/OU=Org/CN=dev1.local/CN=test"
+Прописываем серт
+                sudo nano /etc/apache2/sites-available/dev1.local.conf
 
-3. `sudo apt install apache2`       
+                <VirtualHost *:443>
+                   ServerName dev1.local
+                   DocumentRoot /var/www/dev1.local
+                   SSLEngine on
+                   SSLCertificateFile /etc/ssl/certs/apache-ssc.crt
+                   SSLCertificateKeyFile /etc/ssl/private/apache-ssc.key
+                </VirtualHost>
+Создаём домашнюю страницу
+                sudo mkdir /var/www/dev1.local
+                nano /var/www/dev1.local/index.html
 
+                <h1>it worked!</h1>
+Применяем изменения 
+                sudo a2ensite dev1.local.conf
+                sudo apache2ctl configtest
+                sudo systemctl reload apache2
 
-5.
+4. 
 
 <details> 
 <summary>vagrant@vagrant:~/testssl.sh$ ./testssl.sh -e --fast --parallel https://сайт.домен</summary>
@@ -122,3 +145,5 @@
 
                  Done 2021-12-21 19:20:31 [  57s] 
 </details>
+
+5. 
