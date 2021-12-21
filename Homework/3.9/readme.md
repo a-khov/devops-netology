@@ -7,9 +7,13 @@
                 sudo apt install apache2
                 sudo a2enmod ssl
                 sudo systemctl restart apache2
+
 Генерим серт
+
                 sudo openssl req -x509 -nodes -days 36500 -newkey rsa:2048 -keyout /etc/ssl/private/apache-ssc.key -out /etc/ssl/certs/apache-ssc.crt -subj "/C=RU/ST=SPb/L=SPb/O=DevCo/OU=Org/CN=dev1.local/CN=test"
+
 Прописываем серт
+
                 sudo nano /etc/apache2/sites-available/dev1.local.conf
 
                 <VirtualHost *:443>
@@ -19,17 +23,23 @@
                    SSLCertificateFile /etc/ssl/certs/apache-ssc.crt
                    SSLCertificateKeyFile /etc/ssl/private/apache-ssc.key
                 </VirtualHost>
+
 Создаём домашнюю страницу
+
                 sudo mkdir /var/www/dev1.local
                 nano /var/www/dev1.local/index.html
 
                 <h1>it worked!</h1>
+
 Применяем изменения 
+
                 sudo a2ensite dev1.local.conf
                 sudo apache2ctl configtest
                 sudo systemctl reload apache2
 
-4. <details> 
+
+4. Проверка сайта
+<details> 
 <summary>vagrant@vagrant:~/testssl.sh$ ./testssl.sh -e --fast --parallel https://сайт.домен</summary>
 
                 ###########################################################
