@@ -2,8 +2,8 @@
 
 2. Включил двухфакторную аутентификацию. Подключил Google Authenticator. 
 
-3. 
-Ставим apache2
+3. Ставим apache2
+                
                 sudo apt install apache2
                 sudo a2enmod ssl
                 sudo systemctl restart apache2
@@ -29,9 +29,7 @@
                 sudo apache2ctl configtest
                 sudo systemctl reload apache2
 
-4. 
-
-<details> 
+4. <details> 
 <summary>vagrant@vagrant:~/testssl.sh$ ./testssl.sh -e --fast --parallel https://сайт.домен</summary>
 
                 ###########################################################
