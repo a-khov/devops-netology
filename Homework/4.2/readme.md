@@ -19,9 +19,9 @@ c = a + b
 ### Вопросы:
 | Вопрос  | Ответ |
 | ------------- | ------------- |
-| Какое значение будет присвоено переменной `c`?  | ???  |
-| Как получить для переменной `c` значение 12?  | ???  |
-| Как получить для переменной `c` значение 3?  | ???  |
+| Какое значение будет присвоено переменной `c`?  | будет ошибка, так как нельзя сложить 2 разных типа значений  |
+| Как получить для переменной `c` значение 12?  | Присвоить переменной a текстовое значение '1' (a = '1')  |
+| Как получить для переменной `c` значение 3?  | надо присвоить для переменной b значение 2 убрав кавычки (b = 2)  |
 
 ## Обязательная задача 2
 Мы устроились на работу в компанию, где раньше уже был DevOps Engineer. Он написал скрипт, позволяющий узнать, какие файлы модифицированы в репозитории, относительно локальных изменений. Этим скриптом недовольно начальство, потому что в его выводе есть не все изменённые файлы, а также непонятен полный путь к директории, где они находятся. Как можно доработать скрипт ниже, чтобы он исполнял требования вашего руководителя?
@@ -43,12 +43,27 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+import os
+
+bash_command = ["cd ~/netology/sysadm-homeworks", "git status"]
+
+# find path
+subst=bash_command[0]
+path=subst.split(' ')[1]
+
+result_os = os.popen(' && '.join(bash_command)).read()
+is_change = False
+for result in result_os.split('\n'):
+    if result.find('modified') != -1:
+            prepare_result = result.replace('\tmodified:   ', '')
+            print(path+'/'+prepare_result)
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+./script.sh
+~/netology/sysadm-homeworks/file1
+~/netology/sysadm-homeworks/file2
 ```
 
 ## Обязательная задача 3
@@ -56,12 +71,23 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+import os
+import sys
+path=sys.argv[1]
+bash_command = ["cd "+path, "git status"]
+result_os = os.popen(' && '.join(bash_command)).read()
+is_change = False
+for result in result_os.split('\n'):
+    if result.find('modified') != -1:
+            prepare_result = result.replace('\tmodified:   ', '')
+            print(path+'/'+prepare_result)
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+./script.sh /netology
+~/netology/test1
+~/netology/test3
 ```
 
 ## Обязательная задача 4
