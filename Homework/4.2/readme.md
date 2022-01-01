@@ -95,12 +95,56 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+#!/usr/bin/env python3
+
+import socket
+import datetime
+import time
+
+hostname = ("drive.google.com", "mail.google.com", "google.com")
+
+ipaddres_old = ["","",""]
+ipaddres_current = ["","",""]
+
+print("Cервисы:")
+
+for host in hostname:
+  print(host)
+
+print("\n")
+
+for (index,host) in enumerate(hostname):
+  ipaddres_old[index]=socket.gethostbyname(hostname[index])
+  print(hostname[index]," - ",ipaddres_old[index])
+
+while(1==1):
+  for(index,host) in enumerate(hostname):
+    ipaddres_current[index]=socket.gethostbyname(hostname[index])
+
+    if (ipaddres_current[index]) != ipaddres_old[index]:
+      now = datetime.datetime.now()
+      print(str(now)," [ERROR] ", hostname[index]," IP mismatch: ", ipaddres_old[index]," ", ipaddres_current)
+  time.sleep(3)
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+Cервисы:
+drive.google.com
+mail.google.com
+google.com
+
+
+drive.google.com  -  142.250.190.14
+mail.google.com  -  142.250.191.197
+google.com  -  142.250.65.78
+2022-01-01 12:19:53.152433  [ERROR]  drive.google.com  IP mismatch:  142.250.190.14   ['209.85.145.100', '', '']
+2022-01-01 12:19:53.166567  [ERROR]  mail.google.com  IP mismatch:  142.250.191.197   ['209.85.145.100', '142.251.32.5', '']
+2022-01-01 12:19:53.179203  [ERROR]  google.com  IP mismatch:  142.250.65.78   ['209.85.145.100', '142.251.32.5', '142.250.191.174']
+2022-01-01 12:19:56.207388  [ERROR]  mail.google.com  IP mismatch:  142.250.191.197   ['142.250.190.14', '142.251.6.83', '142.250.191.174']
+2022-01-01 12:19:56.219515  [ERROR]  google.com  IP mismatch:  142.250.65.78   ['142.250.190.14', '142.251.6.83', '142.250.191.174']
+2022-01-01 12:19:59.237244  [ERROR]  drive.google.com  IP mismatch:  142.250.190.14   ['172.217.5.14', '142.251.6.83', '142.250.191.174']
+2022-01-01 12:19:59.261397  [ERROR]  google.com  IP mismatch:  142.250.65.78   ['172.217.5.14', '142.250.191.197', '142.250.191.174']
 ```
 
 ## Дополнительное задание (со звездочкой*) - необязательно к выполнению
