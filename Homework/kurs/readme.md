@@ -238,3 +238,38 @@ gUH1gVAWen9ggsu0S7w7co2YAg57ghacPgGKz635bAhAKyLkmC0HLtU=
 -----END RSA PRIVATE KEY-----
 private_key_type    rsa
 serial_number       1f:4b:e7:c0:a6:0b:80:10:04:cf:a1:1c:8a:27:ff:f2:a6:d5:fe:a4 </details>
+
+***
+Добавляем наши сертификаты в доверенные системой
+
+```
+sudo cp CA_cert.crt /usr/local/share/ca-certificates/
+sudo cp intermediate.cert.pem /usr/local/share/ca-certificates/
+```
+
+***
+Начинаем работать с nginx
+Устанавливаем nginx в систему
+```
+Sudo apt install nginx
+```
+Проверим работу сервера
+ <summary>systemctl status nginx</summary><details>
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2022-01-29 00:03:08 MSK; 16min ago
+       Docs: man:nginx(8)
+    Process: 2746 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 2747 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 2836 (nginx)
+      Tasks: 2 (limit: 1085)
+     Memory: 4.0M
+     CGroup: /system.slice/nginx.service
+             ├─2836 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+             └─2839 nginx: worker process
+
+янв 29 00:03:08 kurs systemd[1]: Starting A high performance web server and a reverse proxy server...
+янв 29 00:03:08 kurs systemd[1]: Started A high performance web server and a reverse proxy server.
+</details>
+
+Проверим доступность сервера с физической машины. Ранее открывались доступы на ufw. 
