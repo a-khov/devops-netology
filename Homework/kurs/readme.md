@@ -140,7 +140,7 @@ vault write -format=json pki/root/sign-intermediate csr=@pki_intermediate.csr \
 
 <details> 
 
- vault write pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h"<summary>
+ <summary>vault write pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h"</summary>
 Key                 Value
 ---                 -----
 ca_chain            [-----BEGIN CERTIFICATE-----
@@ -237,4 +237,4 @@ pB57rMGi7/eJD0OhhLcvN1ZRr4WMR9J+I7pg0CJ6NftkXBfzgNZSZT4FE2aUTGAD
 gUH1gVAWen9ggsu0S7w7co2YAg57ghacPgGKz635bAhAKyLkmC0HLtU=
 -----END RSA PRIVATE KEY-----
 private_key_type    rsa
-serial_number       1f:4b:e7:c0:a6:0b:80:10:04:cf:a1:1c:8a:27:ff:f2:a6:d5:fe:a4 </summary></details>
+serial_number       1f:4b:e7:c0:a6:0b:80:10:04:cf:a1:1c:8a:27:ff:f2:a6:d5:fe:a4 </details>
