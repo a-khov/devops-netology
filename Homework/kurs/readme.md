@@ -22,9 +22,27 @@ $ sudo apt-get update && sudo apt-get install vault
 vault server -dev -dev-root-token-id root
 Открываем новое окно терминала и в нём работаем с сервером vault. В нём задаём переменные VAULT_ADDR и VAULT_TOKEN
 
-*** 
+```
 
 export VAULT_ADDR=http://127.0.0.1:8200
 export VAULT_TOKEN=root
 
+```
+
 ***
+Приступаем к генерации сертификата
+Включаем PKI
+vault secrets enable pki
+>>>Success! Enabled the pki secrets engine at: pki/
+Задаём TTL
+vault secrets tune -max-lease-ttl=87600h pki
+Генерируем корневой сертификат
+vault write -field=certificate pki/root/generate/internal \
+     common_name="example.com" \
+     ttl=87600h > CA_cert.crt
+
+Прописываем ссылки для сертификата
+$ vault write pki/config/urls \
+>      issuing_certificates="$VAULT_ADDR/v1/pki/ca" \
+>      crl_distribution_points="$VAULT_ADDR/v1/pki/crl"
+>>>Success! Data written to: pki/config/urls
