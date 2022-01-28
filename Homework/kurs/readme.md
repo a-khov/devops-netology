@@ -18,3 +18,13 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 
 $ sudo apt-get update && sudo apt-get install vault
 
+Запускаем сервер vault
+vault server -dev -dev-root-token-id root
+Открываем новое окно терминала и в нём работаем с сервером vault. В нём задаём переменные VAULT_ADDR и VAULT_TOKEN
+
+*** 
+
+export VAULT_ADDR=http://127.0.0.1:8200
+export VAULT_TOKEN=root
+
+***
