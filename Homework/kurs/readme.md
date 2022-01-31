@@ -27,10 +27,7 @@ vault server -dev -dev-root-token-id root
 
 ```
 
-Создаём скрипт CAscript.sh для генерации сертификатов и экспорта в формат KEY и запускаем его
-
-<summary>Код скрипта</summary>
-<details>
+<summary>Создаём скрипт CAscript.sh для генерации сертификатов и экспорта в формат KEY и запускаем его</summary><details>
 
 ```
 
@@ -127,6 +124,8 @@ Sudo apt install nginx
 ```
 Проверим работу сервера
  <summary>systemctl status nginx</summary><details>
+
+ ```
 ● nginx.service - A high performance web server and a reverse proxy server
      Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
      Active: active (running) since Sat 2022-01-29 00:03:08 MSK; 16min ago
@@ -142,6 +141,7 @@ Sudo apt install nginx
 
 янв 29 00:03:08 kurs systemd[1]: Starting A high performance web server and a reverse proxy server...
 янв 29 00:03:08 kurs systemd[1]: Started A high performance web server and a reverse proxy server.
+```
 </details>
 
 Проверим доступность сервера с физической машины. Ранее открывались доступы на ufw, поэтому просто переходим по ссылки и попадаем на стартовую страницу nginx.
@@ -158,6 +158,7 @@ server {
 
 ```
 Перезапускаем сервер 
-             systemctl restart nginx
+         systemctl restart nginx
 
-
+На машине хосте заходим на сайт https://test.example.com
+![Сайт](Webj.jpg)
