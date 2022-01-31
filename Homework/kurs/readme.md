@@ -1,12 +1,5 @@
 UFW уже предустановлен, однако sudo apt install ufw для установки и sudo ufw enable для включения
 
-
-```
-ssh 192.168.56.1 -l hello 
-# где -l ключ для логина
-
-```
-
 Открытие портов 
 ```
 
@@ -34,218 +27,94 @@ vault server -dev -dev-root-token-id root
 
 ```
 
-Открываем новое окно терминала и в нём работаем с сервером vault. В нём задаём переменные VAULT_ADDR и VAULT_TOKEN
+Создаём скрипт CAscript.sh для генерации сертификатов и экспорта в формат KEY и запускаем его
 
-```
+<summary>Код скрипта</summary>
+<details>
+#!/bin/bash
 
-export VAULT_ADDR=http://127.0.0.1:8200
-export VAULT_TOKEN=root
+ca_url="https://example.com"
 
-```
+# enable Vault PKI secret
+vault secrets enable \
+  -path=pki_root_ca \
+  -description="PKI Root CA" \
+  -max-lease-ttl="262800h" \
+  pki
 
-***
-Приступаем к генерации сертификата
+# generate root CA
+vault write -format=json pki_root_ca/root/generate/internal \
+  common_name="Root Certificate Authority" \
+  ttl="262800h" > pki-root-ca.json
 
-Включаем PKI
+# save the certificate
+cat pki-root-ca.json | jq -r .data.certificate > rootCA.pem
 
->vault secrets enable pki
->>>Success! Enabled the pki secrets engine at: pki/
+# publish urls for the root ca
+vault write pki_root_ca/config/urls \
+  issuing_certificates="$ca_url/v1/pki_root_ca/ca" \
+  crl_distribution_points="$ca_url/v1/pki_root_ca/crl"
 
+# enable Vault PKI secret
+vault secrets enable \
+  -path=pki_int_ca \
+  -description="PKI Intermediate CA" \
+  -max-lease-ttl="175200h" \
+  pki
 
-Задаём TTL
-```
-vault secrets tune -max-lease-ttl=87600h pki
-```
+# create intermediate CA with common name example.com and save the CSR
+vault write -format=json pki_int_ca/intermediate/generate/internal \
+  common_name="Intermediate Certificate Authority" \
+  ttl="175200h" | jq -r '.data.csr' > pki_intermediate_ca.csr
 
-Генерируем корневой сертификат
+# send the intermediate CA's CSR to the root CA
+vault write -format=json pki_root_ca/root/sign-intermediate csr=@pki_intermediate_ca.csr \
+  format=pem_bundle \
+  ttl="175200h" | jq -r '.data.certificate' > intermediateCA.cert.pem
 
-```
-vault write -field=certificate pki/root/generate/internal \
-     common_name="example.com" \
-     ttl=87600h > CA_cert.crt
+# publish the signed certificate back to the Intermediate CA
+vault write pki_int_ca/intermediate/set-signed \
+  certificate=@intermediateCA.cert.pem
 
-```
+# publish the intermediate CA urls ???
+vault write pki_int_ca/config/urls \
+  issuing_certificates="$ca_url/v1/pki_int_ca/ca" \
+  crl_distribution_points="$ca_url/v1/pki_int_ca/crl"
 
-Прописываем ссылки для сертификата
+# create a role test-dot-local-server
+vault write pki_int_ca/roles/test-dot-local-server \
+  allowed_domains="example.com" \
+  allow_subdomains=true \
+  max_ttl="87600h" \
+  key_bits="2048" \
+  key_type="rsa" \
+  key_usage="DigitalSignature,KeyEncipherment" \
+  ext_key_usage="ServerAuth" \
+  require_cn=true
 
-```
+# create a role test-dot-local-client
+vault write pki_int_ca/roles/test-dot-local-client \
+  allow_subdomains=true \
+  max_ttl="87600h" \
+  key_bits="2048" \
+  key_type="rsa" \
+  key_usage="DigitalSignature" \
+  ext_key_usage="ClientAuth" \
+  require_cn=true
 
-$ vault write pki/config/urls \
->      issuing_certificates="$VAULT_ADDR/v1/pki/ca" \
->      crl_distribution_points="$VAULT_ADDR/v1/pki/crl"
->>>Success! Data written to: pki/config/urls
+# Create cert, 1 month(720 hours)
+vault write -format=json pki_int_ca/issue/test-dot-local-server \
+  common_name="test.example.com" \
+  alt_names="test.example.com" \
+  ttl="720h" > test.example.com.crt
 
-```
+# save cert
+cat test.example.com.crt | jq -r .data.certificate > test.example.com.pem
+cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.pem
+cat test.example.com.crt | jq -r .data.private_key > test.example.com.key
 
-***
-Генерируем промежуточный сертификат
+</details>
 
-Прописываем путь к <b>pki_int</b>
-
-```
->vault secrets enable -path=pki_int pki
->>>Success! Enabled the pki secrets engine at: pki_int/
-
-```
-Задаём время жизни
-
-```
-
->vault secrets tune -max-lease-ttl=43800h pki_int
->>>Success! Tuned the secrets engine at: pki_int/
-
-```
-
-Вводим команду для генерации промежуточного сертификата и сохраняем его в CSR.
-
-```
-
-vault write -format=json pki_int/intermediate/generate/internal \
-     common_name="example.com Intermediate Authority" \
-     | jq -r '.data.csr' > pki_intermediate.csr
-
-```
-
-Теперь подпишем корневым сертификатом промежуточный
-
-```
-vault write -format=json pki/root/sign-intermediate csr=@pki_intermediate.csr \
-     format=pem_bundle ttl="43800h" \
-     | jq -r '.data.certificate' > intermediate.cert.pem
-
-```
-
-Помещаем наш новый сертификат в хранилище
-
-```
-
-> vault write pki_int/intermediate/set-signed certificate=@intermediate.cert.pem
->>> Success! Data written to: pki_int/intermediate/set-signed
-
-```
-Создаём роль для нашего сертификата с временем до отзыва в месяц (720 часов)
-
-```
-
-> vault write pki_int/roles/example-dot-com \
->      allowed_domains="example.com" \
->      allow_subdomains=true \
->      max_ttl="720h"
->>>Success! Data written to: pki_int/roles/example-dot-com
-
-```
-***
-
-Строим цепочку сертификата для сайта
-
-<details> 
-
- <summary>vault write pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h"</summary>
-Key                 Value
----                 -----
-ca_chain            [-----BEGIN CERTIFICATE-----
-MIIDpjCCAo6gAwIBAgIUSHDqInISl399Gyf02fbMe2fAbX4wDQYJKoZIhvcNAQEL
-BQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjIwMTI4MjAzNzU2WhcNMjIw
-MzAxMjAzODI2WjAtMSswKQYDVQQDEyJleGFtcGxlLmNvbSBJbnRlcm1lZGlhdGUg
-QXV0aG9yaXR5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm/DXJOg2
-0BAgfUup+NwOKWRT5Saufh3LR1YnVo0j1rG7NdpwkrbLesViPBvyCamdLJY+G00a
-Ogho1LUhcaewbuZROR7s7kQcRWVcZv1Rhw/qStQeNQqhPGkNY34NHVY2xrY7nZ3k
-+W+1I0vLDQ6sKhnvIc4k3RC6x6q+ZOn1SXSK4Cgt5h8UgYCNEDhTzo+2Xoyb96Oc
-C/lAsxi5fdh3M0Ev3RSOJRdeFf7I8kYXhVXmQMuQY2vZNHAZubef1EelOAaRaDtM
-FI2z5QZR8ITQ/TDMp0dxktKtQe1WcQgTMFv0vHGXhyTP2cu8ve5qUCeu14mVjBaN
-XrtJ1P8U69yN6wIDAQABo4HUMIHRMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBR0B3DnH5g0XJfdD3yGvbkMupxoZzAfBgNVHSMEGDAW
-gBSJIWHuACJPOnj9AD0VqUN5XI8vFTA7BggrBgEFBQcBAQQvMC0wKwYIKwYBBQUH
-MAKGH2h0dHA6Ly8xMjcuMC4wLjE6ODIwMC92MS9wa2kvY2EwMQYDVR0fBCowKDAm
-oCSgIoYgaHR0cDovLzEyNy4wLjAuMTo4MjAwL3YxL3BraS9jcmwwDQYJKoZIhvcN
-AQELBQADggEBAEAgIWeYvHgXir6jzmC0TIqowCKUIKZ90LWE1g7P5Hi9y7mkpJvA
-MB+NSFL4nYdrEgL7KIgQNqqS9hWakpc38ALTN8L/eGa1+n+N0h8elIVuVTwnjf3p
-EiuangEWLMCWlKgwHJgJZif9fobcmP7vBddNsKWYeAVeoEICZ2uMISHuVG1ZOmrU
-fMqdVDNUD9Nm/n5lZDAP/yxLnkr2DihyW5UQWAF6SMgSvUODSzJy/okrWRF6cMCs
-3/5oF601ZH46UAiWuxORKyXvO6EjeS5Hi0uc9pixspyIbMxVD6nlS7Ze7qTHqjbx
-/86VSiz27XgIOYfUIN0/S4fYNf33DoRkbY0=
------END CERTIFICATE-----]
-certificate         -----BEGIN CERTIFICATE-----
-MIIDZjCCAk6gAwIBAgIUH0vnwKYLgBAEz6Eciif/8qbV/qQwDQYJKoZIhvcNAQEL
-BQAwLTErMCkGA1UEAxMiZXhhbXBsZS5jb20gSW50ZXJtZWRpYXRlIEF1dGhvcml0
-eTAeFw0yMjAxMjgyMDUxMDdaFw0yMjAyMjcyMDUxMzdaMBsxGTAXBgNVBAMTEHRl
-c3QuZXhhbXBsZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDd
-wLwtYmab3ZIdLGHuG7xI4+7gy7p3qwVaLGyFI6W1cG6+6DMFIbiLSes7pckgO/qr
-tVFc4Gg2+5XAs7WLm08LcokCPsjD50rRKo8uc5puWtTAOw0+1kePkRh1rpz3yGTF
-YDwY0Mengy2TnxqpHz7nQOavspEEvJQto9uAqw7RwwSc2qQLIMdYxyvSSeilkIj9
-NOGOLvyZBoQHu2KfGHN3paPHQfM+I3Zj5uxPrNXHLERJPPqO9YwEKpXHwGBW1yQ7
-PHNUQGhLIO+D3a4dmbzAKw6x2l4WGptTYa8uimxXVBID+DjAj1VLn2EPgaesIK5k
-NGFS5n4wKdtu4oc6YVGVAgMBAAGjgY8wgYwwDgYDVR0PAQH/BAQDAgOoMB0GA1Ud
-JQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQUUMvDYCMsus51zUA7
-KVnQvHhAl84wHwYDVR0jBBgwFoAUdAdw5x+YNFyX3Q98hr25DLqcaGcwGwYDVR0R
-BBQwEoIQdGVzdC5leGFtcGxlLmNvbTANBgkqhkiG9w0BAQsFAAOCAQEAZaT32Fwo
-P+Dkt1KvUq6Nfxpopd16admaHsU3fwVzra3VVSABZ9EX6R28qqmLd2nnqE+cVkKg
-ASDgdGCjCWLxRoM2vrdtPhPekvoe21wwaXiafsi71oDenCBmKl2NXoyGYY4Q9ls5
-mi5K8H4CZjBh4KZcrVdukktegIE49JgyEItLnO0W8mZl2rp6HmM2HYSwv3WreXdO
-zncdFlmOEwSe5UeG7vGUPsF7VRhoNfunb5XHBIgVSX9zz6PCteBtNf9RSO7PEjHi
-TxnQ1pd0V8CSycfCjzTrrIxjaT5BYzrNdRQ4gkdX7s0zPyrHhmSCNsywdZ2Zgn/P
-UWVS99c/zZWeoA==
------END CERTIFICATE-----
-expiration          1645995097
-issuing_ca          -----BEGIN CERTIFICATE-----
-MIIDpjCCAo6gAwIBAgIUSHDqInISl399Gyf02fbMe2fAbX4wDQYJKoZIhvcNAQEL
-BQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjIwMTI4MjAzNzU2WhcNMjIw
-MzAxMjAzODI2WjAtMSswKQYDVQQDEyJleGFtcGxlLmNvbSBJbnRlcm1lZGlhdGUg
-QXV0aG9yaXR5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm/DXJOg2
-0BAgfUup+NwOKWRT5Saufh3LR1YnVo0j1rG7NdpwkrbLesViPBvyCamdLJY+G00a
-Ogho1LUhcaewbuZROR7s7kQcRWVcZv1Rhw/qStQeNQqhPGkNY34NHVY2xrY7nZ3k
-+W+1I0vLDQ6sKhnvIc4k3RC6x6q+ZOn1SXSK4Cgt5h8UgYCNEDhTzo+2Xoyb96Oc
-C/lAsxi5fdh3M0Ev3RSOJRdeFf7I8kYXhVXmQMuQY2vZNHAZubef1EelOAaRaDtM
-FI2z5QZR8ITQ/TDMp0dxktKtQe1WcQgTMFv0vHGXhyTP2cu8ve5qUCeu14mVjBaN
-XrtJ1P8U69yN6wIDAQABo4HUMIHRMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBR0B3DnH5g0XJfdD3yGvbkMupxoZzAfBgNVHSMEGDAW
-gBSJIWHuACJPOnj9AD0VqUN5XI8vFTA7BggrBgEFBQcBAQQvMC0wKwYIKwYBBQUH
-MAKGH2h0dHA6Ly8xMjcuMC4wLjE6ODIwMC92MS9wa2kvY2EwMQYDVR0fBCowKDAm
-oCSgIoYgaHR0cDovLzEyNy4wLjAuMTo4MjAwL3YxL3BraS9jcmwwDQYJKoZIhvcN
-AQELBQADggEBAEAgIWeYvHgXir6jzmC0TIqowCKUIKZ90LWE1g7P5Hi9y7mkpJvA
-MB+NSFL4nYdrEgL7KIgQNqqS9hWakpc38ALTN8L/eGa1+n+N0h8elIVuVTwnjf3p
-EiuangEWLMCWlKgwHJgJZif9fobcmP7vBddNsKWYeAVeoEICZ2uMISHuVG1ZOmrU
-fMqdVDNUD9Nm/n5lZDAP/yxLnkr2DihyW5UQWAF6SMgSvUODSzJy/okrWRF6cMCs
-3/5oF601ZH46UAiWuxORKyXvO6EjeS5Hi0uc9pixspyIbMxVD6nlS7Ze7qTHqjbx
-/86VSiz27XgIOYfUIN0/S4fYNf33DoRkbY0=
------END CERTIFICATE-----
-private_key         -----BEGIN RSA PRIVATE KEY-----
-MIIEpQIBAAKCAQEA3cC8LWJmm92SHSxh7hu8SOPu4Mu6d6sFWixshSOltXBuvugz
-BSG4i0nrO6XJIDv6q7VRXOBoNvuVwLO1i5tPC3KJAj7Iw+dK0SqPLnOablrUwDsN
-PtZHj5EYda6c98hkxWA8GNDHp4Mtk58aqR8+50Dmr7KRBLyULaPbgKsO0cMEnNqk
-CyDHWMcr0knopZCI/TThji78mQaEB7tinxhzd6Wjx0HzPiN2Y+bsT6zVxyxESTz6
-jvWMBCqVx8BgVtckOzxzVEBoSyDvg92uHZm8wCsOsdpeFhqbU2GvLopsV1QSA/g4
-wI9VS59hD4GnrCCuZDRhUuZ+MCnbbuKHOmFRlQIDAQABAoIBAEX9iCdW8IXviCeX
-E43AyUvETWg8RS1yGC1e6h2Xo7zBsOKmjTvoacPk388iw3leFP9PKlADMEFyZNC+
-p+VZbrhxPRctU9apUO713N1PdYWxO4c03DhiD5IbvLmgFEEMyemWN0Gp2+peN+tp
-A1Qv3X3F+UmpNaZmEurY1fYlh3bi3Pmm7dZc2gucYOeho8h985ipAHe9a2G/50Qh
-bnLGXCtEA7tqrTIY03FYn5VnGP+sOYSye5QDXED9z9spzIFT9XzrkkwCoMmTOBMe
-ixAdV53d5Mg52N26pHgYYtQ8vylqe9+c0RYtWVS9eFQXX47Z/Fw1CqRWgdtZZoKr
-IlTxMMECgYEA/uUZuxiaosDZOekbM0Eh1I2ExVPHWmUEFFkedylaiMQP7U16KDtm
-Fq/hQZDLV7JKTB7DG03q0BTr18yvHHait32ABamuPR1/4LeJPFCLF4PwW96R5L3p
-o/5hxNz3ftcfNrTAAWL+lp9oPgHhWvgr+oMkNXxfFvWcTG9qj/hLH2UCgYEA3rbZ
-7avijOTHqMSUXGGzWqPVX4hdBpich/auzvexh2zHXaWfvH8OvXmUz13BytQnH/GY
-bOFWkliwVP6S+7vc3bMRLWb8ZTg/bUxKkO5hjm+VeCYPJY0RcRRDEa3q2ujs2U2m
-00rSlFhk9v/qyI9ztClShX+PYigCppksCdJGPnECgYEA42K9cYqhaE9heafZ+/8+
-jr8wklgKnzk+Smi2JNdfTGKbUrarIvjaOaLs7/CbdcA3R3Cp3NHFh5siSYDvNhUf
-U1FBw8t7BEosqesRIh039+JbqZkDzWsd4o4r6dK1dxGxZrwYDSSiuPu7opVK1DxP
-/0q+Iniw22p/5DAAgC6f1YECgYEAiazdQSgtT02qAzEqSYV3+wMmRv0kDIzQztf2
-rii+TOo4wDI/caXVtdlv3VSnFLxbR0rxH/WYr7U1pAUPVaCHY2Frr/Zm9id0RhuQ
-SNGj6wodiv10BZGUA6Qz5bzuXs74g0iWZS1uyZdvKqV/POY471lQEwiM2W/EW7p6
-V8Pt+nECgYEA0URUwwXhKSh2r1cO3XAyUAQMPUqw4vyDAcrO4kgBcv1nLr2keTlt
-pB57rMGi7/eJD0OhhLcvN1ZRr4WMR9J+I7pg0CJ6NftkXBfzgNZSZT4FE2aUTGAD
-gUH1gVAWen9ggsu0S7w7co2YAg57ghacPgGKz635bAhAKyLkmC0HLtU=
------END RSA PRIVATE KEY-----
-private_key_type    rsa
-serial_number       1f:4b:e7:c0:a6:0b:80:10:04:cf:a1:1c:8a:27:ff:f2:a6:d5:fe:a4 </details>
-
-***
-Добавляем наши сертификаты в доверенные системой
-
-```
-sudo cp CA_cert.crt /usr/local/share/ca-certificates/
-sudo cp intermediate.cert.pem /usr/local/share/ca-certificates/
-```
 
 ***
 Начинаем работать с nginx
@@ -272,4 +141,20 @@ Sudo apt install nginx
 янв 29 00:03:08 kurs systemd[1]: Started A high performance web server and a reverse proxy server.
 </details>
 
-Проверим доступность сервера с физической машины. Ранее открывались доступы на ufw. 
+Проверим доступность сервера с физической машины. Ранее открывались доступы на ufw, поэтому просто переходим по ссылки и попадаем на стартовую страницу nginx.
+Прописываем в конфигурацию нашего сервера (/etc/nginx/nginx.conf) в строки для SSL и прописываем пути 
+```
+server {
+    listen              443 ssl;
+    server_name         www.example.com;
+    ssl_certificate     /home/hello/test.example.com.pem;
+    ssl_certificate_key /home/hello/test.example.com.key;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    }
+
+```
+Перезапускаем сервер 
+             systemctl restart nginx
+
+
