@@ -31,6 +31,9 @@ vault server -dev -dev-root-token-id root
 
 <summary>Код скрипта</summary>
 <details>
+
+```
+
 #!/bin/bash
 
 ca_url="https://example.com"
@@ -112,7 +115,7 @@ vault write -format=json pki_int_ca/issue/test-dot-local-server \
 cat test.example.com.crt | jq -r .data.certificate > test.example.com.pem
 cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.pem
 cat test.example.com.crt | jq -r .data.private_key > test.example.com.key
-
+```
 </details>
 
 
