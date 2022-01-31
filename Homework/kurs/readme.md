@@ -161,4 +161,4 @@ server {
          systemctl restart nginx
 
 На машине хосте заходим на сайт https://test.example.com
-![Сайт](Webj.jpg)
+![Сайт](webj.jpg)
