@@ -26,6 +26,13 @@ $ sudo apt-get update && sudo apt-get install vault
 vault server -dev -dev-root-token-id root
 
 ```
+В другом окне вводим 
+```
+
+export VAULT_ADDR=http://127.0.0.1:8200
+export VAULT_TOKEN=root
+```
+
 
 <summary>Создаём скрипт CAscript.sh для генерации сертификатов и экспорта в формат KEY и запускаем его</summary><details>
 
@@ -112,6 +119,8 @@ vault write -format=json pki_int_ca/issue/test-dot-local-server \
 cat test.example.com.crt | jq -r .data.certificate > test.example.com.pem
 cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.pem
 cat test.example.com.crt | jq -r .data.private_key > test.example.com.key
+
+systemctl restart nginx
 ```
 </details>
 
@@ -162,3 +171,9 @@ server {
 
 На машине хосте заходим на сайт https://test.example.com
 ![Сайт](webj.jpg)
+![Сертфикат](sert_old.jpg)
+
+Теперь запишем наш скрипт в crontab
+```
+ nano /etc/crontab
+
