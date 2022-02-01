@@ -173,7 +173,46 @@ server {
 ![Сайт](webj.jpg)
 ![Сертфикат](sert_old.jpg)
 
+<summary>Создадим скрипт для перерегистрации сертификата</summary>
+<details>
+
+```
+vault secrets enable \
+	-path=pki_int_ca \
+	-description="PKI Intermediate CA" \
+	-max-lease-ttl="175200h"
+
+vault write pki_int_ca/roles/test-dot-local-client \
+	max_ttl="87600h" \
+	allow_subdomains=true
+
+vault write -format=json pki_int_ca/issue/test-dot-local-server \
+	common_name="test.example.com" \
+	alt_names="test.example.com" \
+	ttl="720" > test.example.com.crt
+
+cat test.example.com.crt | jq -r .data.certificate > test.example.com.pem
+cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.pem
+cat test.example.com.crt | jq -r .data.private_key >> test.example.com.pem
+cat test.example.com.crt | jq -r .data.private_key > test.example.com.key
+
+nginx -s reload
+
+```
+</details>
+
 Теперь запишем наш скрипт в crontab
 ```
- nano /etc/crontab
+ crontab -e
+
+USER=hello
+VAULT_TOKEN=root
+VAULT_ADDR=http://127.0.0.1:8200
+
+34 12 1 * * /home/hello/CA_Rescript.sh  >> /home/hello/Rescript.log 2>&1
+
+```
+По планировщику каждый месяц в 12:34 будет сгенерирован новый сертификат. Ждём 12:34 и проверяем сервер
+![Перегенерация](rescript.jpg)
+
 
