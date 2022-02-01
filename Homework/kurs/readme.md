@@ -120,7 +120,6 @@ cat test.example.com.crt | jq -r .data.certificate > test.example.com.pem
 cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.pem
 cat test.example.com.crt | jq -r .data.private_key > test.example.com.key
 
-systemctl restart nginx
 ```
 </details>
 
@@ -171,9 +170,9 @@ server {
 
 На машине хосте заходим на сайт https://test.example.com
 ![Сайт](webj.jpg)
-![Сертфикат](sert_old.jpg)
+![Сертфикат](cert_old.jpg)
 
-<summary>Создадим скрипт для перерегистрации сертификата</summary>
+<summary>Создадим скрипт CA_Rescript.sh для перерегистрации сертификата</summary>
 <details>
 
 ```
