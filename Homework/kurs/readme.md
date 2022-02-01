@@ -208,10 +208,10 @@ USER=hello
 VAULT_TOKEN=root
 VAULT_ADDR=http://127.0.0.1:8200
 
-34 12 1 * * /home/hello/CA_Rescript.sh  >> /home/hello/Rescript.log 2>&1
+20 16 1 * * /home/hello/CA_Rescript.sh  >> /home/hello/Rescript.log 2>&1
 
 ```
-По планировщику каждый месяц в 12:34 будет сгенерирован новый сертификат. Ждём 12:34 и проверяем сервер
+По планировщику каждый месяц 1 числа в 16:20 будет сгенерирован новый сертификат. Ждём 16:20 и проверяем сервер
 ![Перегенерация](rescript.jpg)
 
 
