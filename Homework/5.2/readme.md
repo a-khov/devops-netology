@@ -18,13 +18,13 @@
 
 ## Задача 3
 - vagrant box list
-    bento/ubuntu-20.04 (virtualbox, 202107.28.0)
+  ```  bento/ubuntu-20.04 (virtualbox, 202107.28.0)```
 
 -  vagrant -v
-    Vagrant 2.2.19 
+  ```  Vagrant 2.2.19 ```
 
 - ansible —version 
-    ansible 2.9.6
+  ```  ansible 2.9.6 ```
 
 
 
