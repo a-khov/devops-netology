@@ -12,7 +12,8 @@
 - Чем Ansible выгодно отличается от других систем управление конфигурациями?
   - Ansible позволяет управлять всеми известными системами благодаря доп. модулям. Так же большой плюс что не нужна установка ПО на клиентские машины
 
-- 
+- Какой, на ваш взгляд, метод работы систем конфигурации более надёжный push или pull?
+ - `push` - потому что сервер инициирует отправку конфигурации, а не клиентская машина.
 
 
 ## Задача 3
@@ -29,6 +30,16 @@ Vagrant 2.2.19
 
 ## Задача 4
 
--  
-
--  
+```
+ vagrant@vagrant:~$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+OK
+vagrant@vagrant:~$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+vagrant@vagrant:~$ sudo apt update
+vagrant@vagrant:~$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+vagrant@vagrant:~$ sudo usermod -aG docker ${USER}
+vagrant@vagrant:~$ su - ${USER}
+vagrant@vagrant:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+vagrant@vagrant:~$ docker -v
+Docker version 20.10.16, build aa7e414
+```
