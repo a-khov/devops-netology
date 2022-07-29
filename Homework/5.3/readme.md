@@ -49,9 +49,9 @@ https://hub.docker.com/u/xobah
 - Мониторинг-стек на базе Prometheus и Grafana;
     - Стеки однозначно контейнеры и подключить на общую базу
 - MongoDB, как основное хранилище данных для java-приложения;
-    - 
+    - СУБД на виртуальную машину, а базу данных на физические сервера
 - Gitlab сервер для реализации CI/CD процессов и приватный (закрытый) Docker Registry.
-
+    - Виртуальная машина либо физический сервер. Довольно высокие требования к железу
 ## Задача 3
 
 - Запустите первый контейнер из образа ***centos*** c любым тэгом в фоновом режиме, подключив папку ```/data``` из текущей рабочей директории на хостовой машине в ```/data``` контейнера;
@@ -59,7 +59,19 @@ https://hub.docker.com/u/xobah
 - Подключитесь к первому контейнеру с помощью ```docker exec``` и создайте текстовый файл любого содержания в ```/data```;
 - Добавьте еще один файл в папку ```/data``` на хостовой машине;
 - Подключитесь во второй контейнер и отобразите листинг и содержание файлов в ```/data``` контейнера.
-
+```
+PS C:\Users\localadministrator> docker pull centos
+PS C:\Users\localadministrator> docker pull debian
+PS C:\Users\localadministrator> docker run -d -it -v c:\data:/data --name CentosDATA centos bash
+760d2cfb74c147c8b247e9e905c213bf7f166bf3102142ef273ef99f87b2c3f5
+PS C:\Users\localadministrator> docker run -d -it -v c:\data:/data --name DebianDATA debian bash
+ca7be5d98b3d81273463b29bd6a9a19e370b3dfa8af03a6ecd6b3622ec28d592
+PS C:\Users\localadministrator> docker exec CentosDATA echo "text to file2" > /data/file-2
+PS C:\Users\localadministrator> docker exec DebianDATA ls data
+HostFile.txt
+file-2
+PS C:\Users\localadministrator> docker exec DebianDATA ls data
+```
 ## Задача 4 (*)
 
 Воспроизвести практическую часть лекции самостоятельно.
