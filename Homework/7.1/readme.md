@@ -83,8 +83,10 @@ is 1.2.6. You can update by downloading from https://www.terraform.io/downloads.
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt update && sudo apt install terraform
-
- mv /usr/bin/terraform /usr/bin/terraform129
+ mv /usr/bin/terraform /usr/bin/terraform126
+ terraform126 --version
+    Terraform v1.2.6
+    on linux_amd64
 
  wget https://releases.hashicorp.com/terraform/1.1.5/terraform_1.1.5_linux_amd64.zip
  unzip terraform_1.1.5_linux_amd64.zip
