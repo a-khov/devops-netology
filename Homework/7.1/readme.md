@@ -1,34 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@a-khov 
-netology-code
-/
-virt-homeworks
-Public
-Code
-Issues
-2
-Pull requests
-1
-Actions
-Projects
-Wiki
-Security
-Insights
-virt-homeworks/07-terraform-01-intro/README.md
-@susanna-susanna
-susanna-susanna Update README.md
-Latest commit 2ed7e3e on 1 Aug 2021
- History
- 4 contributors
-@andrey-borue@aak74@susanna-alieva@susanna-susanna
-67 lines (45 sloc)  5.19 KB
-
 # Домашнее задание к занятию "7.1. Инфраструктура как код"
 
 ## Задача 1. Выбор инструментов. 
@@ -85,6 +54,12 @@ Latest commit 2ed7e3e on 1 Aug 2021
 Установите терраформ при помощи менеджера пакетов используемого в вашей операционной системе.
 В виде результата этой задачи приложите вывод команды `terraform --version`.
 
+`
+terraform -version
+Terraform v1.2.6
+on windows_amd64
+`
+
 ## Задача 3. Поддержка легаси кода. 
 
 В какой-то момент вы обновили терраформ до новой версии, например с 0.12 до 0.13. 
@@ -92,5 +67,34 @@ Latest commit 2ed7e3e on 1 Aug 2021
 В связи с этим необходимо сделать так, чтобы вы могли одновременно использовать последнюю версию терраформа установленную при помощи
 штатного менеджера пакетов и устаревшую версию 0.12. 
 
-В виде результата этой задачи приложите вывод `--version` двух версий терраформа доступных на вашем компьютере 
-или виртуальной машине.
+В виде результата этой задачи приложите вывод `--version` двух версий терраформа доступных на вашем компьютере или виртуальной машине.
+
+```
+terraform1.1.9 -version
+Terraform v1.1.9
+on windows_amd64
+
+Your version of Terraform is out of date! The latest version
+is 1.2.6. You can update by downloading from https://www.terraform.io/downloads.html
+```
+
+Тоже самое на nix
+```
+wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
+
+ mv /usr/bin/terraform /usr/bin/terraform129
+
+ wget https://releases.hashicorp.com/terraform/1.1.5/terraform_1.1.5_linux_amd64.zip
+ unzip terraform_1.1.5_linux_amd64.zip
+    Archive:  terraform_1.1.5_linux_amd64.zip
+    inflating: terraform
+mv terraform /usr/bin/terraform115
+terraform115 --version
+    Terraform v1.1.5
+    on linux_amd64
+
+    Your version of Terraform is out of date! The latest version
+    is 1.2.6. You can update by downloading from https://www.terraform.io/downloads.html
+```
